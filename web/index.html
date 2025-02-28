@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BASH Beta | NETVIEWERS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <style>
+        body {
+            background-color: #000;
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+            padding: 0;
+            margin: 0;
+        }
+        .console {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            white-space: nowrap;
+        }
+        .console input {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: inherit;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- <div class="w-screen h-screen relative left-0 top-0 flex flex-col sm:flex-row" hx-post="/get-chat-window" hx-trigger="load" hx-target="#chat-wind" hx-swap="outerHTML"> -->
+    <div class="w-screen h-screen relative left-0 top-0 flex flex-row">
+        <div class="console flex-1 min-h-screen relative [&>span]:block">
+            <span>Welcome to the Bash Console</span>
+            <div id="cout" class="output text-green-500 mt-2"></div>
+            <div class="w-full flex">
+                <span id="hostname" class="prompt inline mr-2" hx-get="/get-username" hx-trigger="load" hx-target="#hostname" hx-swap="innerHTML"></span>
+                <input name="message" hx-post="/cmd"  hx-trigger="keyup[keyCode==13]" hx-target="#cout" hx-swap="beforeend" class="flex-1 bg-transparent border-none text-green-500 focus:outline-none" type="text" id="input" hx-on::before-request="this.value =''" autofocus>
+            </div>
+        </div>
+        <div id="chat-wind"></div>
+<!--         <div class="w-[50%] min-h-[50%] max-h-screen relative flex flex-col-reverse border-l-2 border-red-600">
+            <input name="message" class="input_msg py-2 px-6 border-none outline-none bg-inherit" type="text" placeholder="Send message" autofocus >
+            <div class="chat relative flex-1 flex flex-col-reverse px-6 py-2 overflow-y-auto"></div>
+        </div> -->
+    </div>
+<!--     <script>
+        const observer = new MutationObserver((mutationsList, observer) => {
+            const input = document.body.querySelector(".input_msg")
+            const chat = document.body.querySelector(".chat")
+
+            if (input && chat) {
+                const conn = new WebSocket("ws://localhost:8080/ws")
+                const input = document.body.querySelector(".input_msg")
+                const chat = document.body.querySelector(".chat")
+
+                conn.onmessage = (e) => {
+                    const msg = document.createElement("p")
+                    msg.textContent = e.data
+                    chat.appendChild(msg);
+                    (chat.firstChild) ? chat.insertBefore(msg, chat.firstChild) : chat.appendChild(msg)
+                } 
+
+                input.addEventListener("keypress", (e) => {
+                    if (e.key !== "Enter") return
+                    if (conn.readyState !== WebSocket.OPEN && input.value.trim() === "") console.log("WebSocket is not open. Current state:", conn.readyState) 
+                    else conn.send(input.value)
+                    input.value = ""  
+                })
+                observer.disconnect()
+            }
+        })
+        observer.observe(document.body, { childList: true, subtree: true })
+    </script> -->
+</body>
+</html> 
